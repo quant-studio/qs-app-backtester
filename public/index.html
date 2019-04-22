@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app" ng-controller="main">
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Quant Studio Charting App</title>
 		
+		<!-- Google Font -->
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,500,600,700' rel='stylesheet' type='text/css'>
+		
 		<!-- The app's dependencies -->
-		<script defer src="/js/angular/angular.min.js"></script>
-		<script defer src="/js/jquery/jquery.min.js"></script>
-		<script defer src="/js/underscore/underscore.js"></script>
+		<script src="/js/angular/angular.min.js"></script>
+		<script src="/js/jquery/jquery.min.js"></script>
+		<script src="/js/underscore/underscore.js"></script>
 		
 		<!-- Quant Studio App SDK -->
 		<script defer src="/js/quant-studio-sdk/sdk.js"></script>
@@ -16,12 +19,20 @@
 		<!-- Font Awesome, for cool icons -->
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
 		
+		<!-- Ace Editor -->
+		<script src="/js/ace-builds/src-min-noconflict/ace.js" type="text/javascript"></script>
+		<script src="/js/ace-builds/src-min-noconflict/theme-twilight.js" type="text/javascript"></script>
+		<script src="/js/ace-builds/src-min-noconflict/mode-javascript.js" type="text/javascript"></script>
+		<script src="/js/angular-ui-ace/ui-ace.js" type="text/javascript"></script>
+		
+		<!-- Our CSS UI kit -->
+		<link rel="stylesheet" href="/css/toolkit.css">
+		
 		<!-- The app's code -->
-		<script defer src="/js/app/app.js"></script>
+		<script src="/js/app/app.js"></script>
 		
 	</head>
-	<body ng-app="app" ng-controller="main">
-		
+	<body>
 		<div app-main></div>
 		
 	</body>

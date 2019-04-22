@@ -1,3 +1,84 @@
-<div id="output" style="color: #ffffff; padding: 10px; font-size: 12px; line-height:20px;">
+<div>
+	<div class="ui-tabs">
+		<div ng-click="tabs.select('datasource')" ng-class="{selected:tabs.is('datasource')}">
+			<span class="fas fa-database"></span> Datasource
+		</div>
+		<div ng-click="tabs.select('positions')" ng-class="{selected:tabs.is('positions')}">
+			<span class="fas fa-file-invoice-dollar"></span> Positions
+		</div>
+		<div ng-click="tabs.select('stats')" ng-class="{selected:tabs.is('stats')}">
+			<span class="fas fa-percentage"></span> Stats
+		</div>
+		<div ng-click="tabs.select('charts')" ng-class="{selected:tabs.is('charts')}">
+			<span class="fas fa-chart-line"></span> Results
+		</div>
+	</div>
 	
+	
+	<!-- Datasource -->
+	<div ng-if="tabs.is('datasource')">
+		<div class="floating-tabs">
+			<div>
+				<div ng-click="backtester.datasource.setType('csv')" ng-class="{active:backtester.settings.datasource.type=='csv'}">
+					<span class="fas fa-file-csv"></span> 
+					CSV
+				</div>
+				<div ng-click="backtester.datasource.setType('project')" ng-class="{active:backtester.settings.datasource.type=='project'}">
+					<span class="fas fa-file-csv"></span> 
+					Project
+				</div>
+			</div>
+		</div>
+		
+		<div class="ui-form" ng-if="backtester.settings.datasource.type=='csv'">
+			<div>
+				<div>
+					<div>
+						URL:
+					</div>
+					<div>
+						<input type="text" placeholder="https://..." ng-model="backtester.settings.datasource.csvSource" />
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="ctas small">
+			<div ng-click="backtester.datasource.test()">
+				<span class="fas fa-play-circle"></span> Test
+			</div>
+			<div ng-click="tabs.select('positions')">
+				<span class="fas fa-arrow-circle-right"></span> Next: Positions
+			</div>
+		</div>
+	</div>
+	
+	
+	<!-- Positions -->
+	<div ng-if="tabs.is('positions')">
+		<div class="code_input">
+			<!---->
+			<div class="code_static">
+				function(
+					<span tooltip-placement="top" uib-tooltip="Current Datapoint">datapoint</span>,
+					<span tooltip-placement="top" uib-tooltip="Full Dataset">data</span>
+				) {
+			</div>
+			<div class="code">
+				<div ui-ace="{mode:'javascript',theme:'twilight',useWrapMode:true,showGutter:false,highlighting:true}" ng-model="backtester.settings.positionsCode"></div>
+			</div>
+			<div class="code_static">
+				}
+			</div>
+		</div>
+		
+		<div class="ctas small">
+			<div ng-click="backtester.positions.test()">
+				<span class="fas fa-play-circle"></span> Test
+			</div>
+			<div ng-click="backtester.positions.run()">
+				<span class="fas fa-check-circle"></span> Start Backtesting
+			</div>
+		</div>
+	</div>
 </div>

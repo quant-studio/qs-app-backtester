@@ -1,14 +1,72 @@
 //=============================
-angular.module('quant-studio', [])
+angular.module('quant-studio', ['ui.ace'])
 
 .directive('appMain', function() {
 	var component = function($scope, element, attrs, ctlr, transcludeFn) {
+		
+		// Utilities
+		$scope.safeApply = function(fn) {
+			var phase = this.$root.$$phase;
+			if(phase == '$apply' || phase == '$digest') {
+				if(fn && (typeof(fn) === 'function')) {
+					fn();
+				}
+			} else {
+				this.$apply(fn);
+			}
+		};
 		
 		// To make it easier to output HTML
 		var output = function(status, details) {
 			$('#output').append($('<div>'+status+'</div>'));
 			console.log(status, details);
 		}
+		
+		
+		$scope.tabs	= {
+			selected:	'positions',
+			select:		function(id) {
+				$scope.safeApply(function() {
+					$scope.tabs.selected	= id;
+				});
+			},
+			is:		function(id) {
+				return $scope.tabs.selected	== id;
+			}
+		};
+		
+		
+		
+		/*
+			Backtesting
+		*/
+		$scope.backtester = {
+			settings: {
+				datasource: {
+					type:		'csv',
+					csvSource:	''
+				}
+			},
+			datasource: {
+				setType:	function(type) {
+					$scope.backtester.settings.datasource.type	= type;
+					switch (type) {
+						case "csv":
+							$scope.backtester.settings.datasource.type	= type;
+						break;
+						case "project":
+							
+						break;
+					}
+				}
+			}
+		}
+		
+		
+		
+		
+		
+		
 		
 		// 
 		sdk.onInit(function() {
@@ -75,4 +133,8 @@ angular.module('app', ['quant-studio'])
 
 .controller('main', function($scope, $locale) {
 	//output("main init()", $scope);
+	
+	$scope.date = new Date();
+	
+	$scope.version = 2;
 });

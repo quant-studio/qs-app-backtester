@@ -1,0 +1,465 @@
+[ng-click] {
+  cursor: pointer;
+}
+body,
+html {
+  padding: 0;
+  margin: 0;
+  background-color: #262f3d;
+  font-family: 'Open Sans', sans-serif;
+}
+.ace_editor {
+  height: 200px;
+}
+.link {
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(66, 165, 245, 0.7);
+  transition: color ease-out 0.3s;
+}
+.link:hover {
+  text-decoration: underline;
+}
+.loading-indicator {
+  padding: 20px auto;
+  font-size: 25px;
+  color: #000000;
+  text-align: center;
+}
+.app-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: table /*!important*/;
+  z-index: 51000;
+  /* navbar is 50000 */
+  transition: opacity ease-out 0.3s, transform ease-out 0.3s;
+  /* Dialog bg */
+}
+.app-dialog.ng-enter,
+.app-dialog.ng-leave.ng-leave-active {
+  opacity: 0;
+}
+.app-dialog.ng-leave,
+.app-dialog.ng-enter.ng-enter-active {
+  opacity: 1;
+}
+.app-dialog.front {
+  z-index: 52000;
+}
+.app-dialog > .bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.app-dialog .overlay {
+  position: relative;
+  vertical-align: middle;
+  text-align: center;
+  display: table-cell;
+}
+.app-dialog .overlay > div {
+  max-width: 500px;
+  padding: 60px;
+  margin: 0 auto;
+  text-align: left;
+  border-radius: 5px;
+}
+.app-dialog .overlay > div .dialog-close {
+  color: #ffffff;
+  text-align: right;
+  margin: 10px 0;
+  font-size: 12px;
+}
+.app-dialog .overlay.form > div {
+  max-width: 500px;
+}
+.app-dialog .overlay.medium > div {
+  max-width: 500px;
+}
+.app-dialog .overlay.large > div {
+  max-width: 800px;
+}
+.app-dialog.small > .overlay > div {
+  max-width: 400px;
+}
+.app-dialog.medium > .overlay > div {
+  max-width: 600px;
+}
+.app-dialog.large .overlay > div {
+  max-width: 800px;
+}
+.app-dialog.x-large > .overlay > div {
+  max-width: 90%;
+}
+.app-dialog-box {
+  background-color: #292B37;
+  border-radius: 5px;
+}
+.app-dialog-box .message {
+  text-align: center;
+  padding: 3px;
+  font-size: 11px;
+  background-color: #508ED7;
+  color: #ffffff;
+}
+.app-dialog-box .message a {
+  font-size: 10px;
+  text-decoration: underline;
+}
+.app-dialog-box .header {
+  background-color: #1F2229;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px;
+  border-bottom: 1px solid #20222E;
+  border-radius: 5px 5px 0 0;
+  text-align: center;
+}
+.app-dialog-box .header > .author {
+  color: #1CC5BC;
+  font-size: 11px;
+  font-weight: 500;
+}
+.app-dialog-box .header.with-tabs {
+  position: relative;
+}
+.app-dialog-box .header.with-tabs .dialog-header-tabs {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.app-dialog-box .menu {
+  background-color: #2D2F3B;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px;
+  border-bottom: 1px solid #20222E;
+}
+.app-dialog-box .tabs {
+  background-color: #2D2F3B;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px;
+  border-bottom: 1px solid #20222E;
+  text-align: center;
+}
+.app-dialog-box .tabs > div {
+  display: inline-block;
+  padding: 5px 15px;
+  margin: 4px 0;
+  color: #b3b3b3;
+  border-bottom: 2px solid transparent;
+  /*transition:		border-bottom 0.2s linear, color 0.3s linear;*/
+}
+.app-dialog-box .tabs > div.selected {
+  border-bottom: 2px solid #508ED7;
+  color: #ffffff;
+}
+.app-dialog-box .tabs > div:hover {
+  color: #ffffff;
+}
+.app-dialog-box .tabs > div .tag {
+  font-size: 8px;
+}
+.app-dialog-box .body {
+  background-color: #292B37;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 500;
+  /*padding:			10px;*/
+  border-bottom: 1px solid #20222E;
+  border-radius: 0 0 5px 5px;
+}
+.app-dialog-box .body.no-padding {
+  padding: 0;
+}
+.app-dialog-box .body.scroll {
+  max-height: 600px;
+  overflow-y: auto;
+}
+.app-dialog-box .confirmation-message {
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.7);
+}
+.app-dialog-box.static-height .body {
+  height: 400px;
+  overflow-y: auto;
+}
+.app-dialog-box .text-block {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 300;
+  padding: 10px;
+  text-align: justify;
+}
+.app-dialog-box .text-block.center {
+  text-align: center;
+}
+.app-dialog-box .text-block.right {
+  text-align: right;
+}
+.app-dialog-box .text-block a {
+  color: #508ED7;
+  text-decoration: underline;
+}
+.app-dialog-box .footer {
+  background-color: #508ED7;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 5px 0;
+}
+.app-dialog-box .footer:last-child {
+  margin: 5px 0 0 0;
+}
+.app-dialog-box .footer:hover {
+  background-color: #3b81d2;
+}
+.app-dialog-box .footer.green {
+  background-color: #5BB85D;
+}
+.app-dialog-box .footer.green:hover {
+  background-color: #4bae4e;
+}
+.app-dialog-box .footer.disabled,
+.app-dialog-box .footer.disabled:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.2);
+  cursor: default;
+}
+.app-dialog-box .text-link {
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 300;
+  padding: 10px;
+  text-align: center;
+  margin: 5px 0;
+}
+.ui-list {
+  background-color: #ffffff;
+  border: 1px solid #EBEBEB;
+  max-height: 200px;
+  overflow: auto;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+.ui-list > div {
+  padding: 5px;
+  font-size: 13px;
+  line-height: 15px;
+  font-weight: 500;
+  text-align: left;
+  color: #333333;
+}
+.ui-list > div.active {
+  background-color: #cce8ff;
+}
+.ui-list > div:hover {
+  background-color: rgba(66, 165, 245, 0.1);
+}
+.ui-form {
+  width: 100%;
+  background-color: #171c25;
+  padding: 10px 0;
+}
+.ui-form > div {
+  display: table;
+  width: 100%;
+}
+.ui-form > div > div {
+  display: table-row;
+}
+.ui-form > div > div > div {
+  display: table-cell;
+  padding: 5px;
+  border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color ease-out 0.3s;
+}
+.ui-form > div > div > div:first-child {
+  transition: color ease-out 0.3s;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  width: 150px;
+}
+.ui-form > div > div > div:last-child {
+  font-size: 12px;
+  font-weight: 500;
+  color: #333333;
+}
+.ui-form > div > div > div:last-child input {
+  width: 100%;
+  padding: 5px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.ui-form > div > div:hover > div {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.ui-form > div > div:hover > div:first-child {
+  color: #ffffff;
+}
+.ui-tabs {
+  background-color: #1f2229;
+  text-align: center;
+}
+.ui-tabs > div {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+  font-size: 12px;
+  border-bottom: 3px solid transparent;
+  padding: 10px 25px;
+  transition: color ease-out 0.3s, border-bottom ease-out 0.3s;
+}
+.ui-tabs > div.selected {
+  color: #ffffff;
+  border-bottom: 3px solid #42a5f5;
+}
+.floating-tabs {
+  margin: 10px 0;
+  text-align: center;
+}
+.floating-tabs > div {
+  display: table;
+  border: 1px solid #20222E;
+  border-radius: 10px;
+  margin: 5px auto;
+}
+.floating-tabs > div > div {
+  display: table-cell;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.floating-tabs > div > div:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+.floating-tabs > div > div.active {
+  background-color: #508ED7;
+  color: #ffffff;
+}
+.floating-tabs > div > div:first-child {
+  border-radius: 10px 0 0 10px;
+  padding-left: 15px;
+}
+.floating-tabs > div > div:last-child {
+  border-radius: 0 10px 10px 0;
+  padding-right: 15px;
+}
+.code_input {
+  background-color: #171c25;
+  padding: 5px;
+}
+.code_input > .code_static {
+  padding: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+}
+.code_input > .code_static span {
+  font-weight: 600;
+  color: #039BE5;
+}
+.code_input > .code {
+  margin-left: 20px;
+}
+.code_input > .code.small > div.ace_editor {
+  height: 200px;
+}
+.code_input.with-console {
+  border-radius: 5px 5px 0 0;
+}
+.code_input > .error {
+  padding: 5px;
+  background-color: #D03736;
+  font-size: 7px;
+  color: #ffffff;
+  font-weight: 500;
+  border-radius: 3px;
+}
+.ctas {
+  text-align: center;
+  margin: 10px auto;
+}
+.ctas div,
+.ctas a {
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+  margin: 10px;
+  border-radius: 5px;
+  padding: 0 25px;
+  background-color: #42a5f5;
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 45px;
+  font-weight: 600;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-out, background-color 0.2s ease-out, color 0.2s ease-out;
+}
+.ctas div:hover,
+.ctas a:hover {
+  background-color: #128ef2;
+  text-decoration: none;
+}
+.ctas div.main,
+.ctas a.main {
+  background-color: #4db6ac;
+}
+.ctas div.main:hover,
+.ctas a.main:hover {
+  background-color: #3c948b;
+  text-decoration: none;
+}
+.ctas div.danger,
+.ctas a.danger {
+  background-color: #e57373;
+  color: #ffffff;
+}
+.ctas div.danger:hover,
+.ctas a.danger:hover {
+  background-color: #dd4848;
+  text-decoration: none;
+}
+.ctas div.disabled,
+.ctas a.disabled {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #333333;
+  text-decoration: none;
+  cursor: default;
+}
+.ctas div.disabled:hover,
+.ctas a.disabled:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #333333;
+  text-decoration: none;
+  cursor: default;
+}
+.ctas.small div,
+.ctas.small a {
+  font-size: 12px;
+  line-height: 35px;
+  padding: 0 15px;
+  margin: 5px;
+}
+
+/*# sourceMappingURL=toolkit.css.map */
