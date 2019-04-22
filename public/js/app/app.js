@@ -24,10 +24,20 @@ angular.module('quant-studio', ['ui.ace'])
 		
 		
 		$scope.tabs	= {
-			selected:	'positions',
+			selected:	'datasource',
 			select:		function(id) {
 				$scope.safeApply(function() {
-					$scope.tabs.selected	= id;
+					switch (id) {
+						case "stats":
+						case "charts":
+							if ($scope.backtester.results) {
+								$scope.tabs.selected	= id;
+							}
+						break;
+						default:
+							$scope.tabs.selected	= id;
+						break;
+					}
 				});
 			},
 			is:		function(id) {
@@ -44,7 +54,10 @@ angular.module('quant-studio', ['ui.ace'])
 			settings: {
 				datasource: {
 					type:		'csv',
-					csvSource:	''
+					csvSource:	'http://localhost:8080/data/AAPL.csv'
+				},
+				positions: {
+					code:	''
 				}
 			},
 			datasource: {
@@ -58,6 +71,54 @@ angular.module('quant-studio', ['ui.ace'])
 							
 						break;
 					}
+				},
+				test:	function() {
+					$scope.backtester.datasource.loadFromURL($scope.backtester.settings.datasource.csvSource, function(response) {
+						var csv = $scope.backtester.datasource.parseCSV(response);
+					});
+				},
+				loadFromURL:	function(url, callback) {
+					var obj = {
+						url:		url,
+						method: 	"GET",
+						qs:			{},
+						headers:	{}
+					};
+					var ajaxObj = {
+						url: 		obj.url,
+						type:		obj.method||'POST',
+						data:		obj.qs,
+						headers:	obj.headers,
+						success: 	function(response, status){
+							callback(response);
+						},
+						error: function(jqXHR, data, errorThrown) {
+							console.log("error", jqXHR, data, errorThrown);
+							console.log({
+								status:	'Request Error',
+								error:	errorThrown,
+								data:	data
+							});
+						}
+					};
+					$.ajax(ajaxObj);
+				},
+				parseCSV:	function(csvString) {
+					var lines = csvString.split(/\r?\n/);
+					var header	= lines[0].split(',');
+					var lines	= _.map(lines.slice(1), function(line) {
+						var cells	= line.split(',');
+						var output = {};
+						_.each(cells, function(cell, n) {
+							if (header[n]=='date') {
+								output[header[n]] = moment(cell).toDate();
+							} else {
+								output[header[n]] = cell.indexOf('.')==-1?parseInt(cell):parseFloat(cell);
+							}
+						});
+						return output;
+					});
+					return lines;
 				}
 			}
 		}

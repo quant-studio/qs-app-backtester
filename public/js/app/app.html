@@ -6,10 +6,10 @@
 		<div ng-click="tabs.select('positions')" ng-class="{selected:tabs.is('positions')}">
 			<span class="fas fa-file-invoice-dollar"></span> Positions
 		</div>
-		<div ng-click="tabs.select('stats')" ng-class="{selected:tabs.is('stats')}">
+		<div ng-click="tabs.select('stats')" ng-class="{selected:tabs.is('stats'), disabled:!backtester.results}">
 			<span class="fas fa-percentage"></span> Stats
 		</div>
-		<div ng-click="tabs.select('charts')" ng-class="{selected:tabs.is('charts')}">
+		<div ng-click="tabs.select('charts')" ng-class="{selected:tabs.is('charts'), disabled:!backtester.results}">
 			<span class="fas fa-chart-line"></span> Results
 		</div>
 	</div>
@@ -65,7 +65,7 @@
 				) {
 			</div>
 			<div class="code">
-				<div ui-ace="{mode:'javascript',theme:'twilight',useWrapMode:true,showGutter:false,highlighting:true}" ng-model="backtester.settings.positionsCode"></div>
+				<div ui-ace="{mode:'javascript',theme:'twilight',useWrapMode:true,showGutter:false,highlighting:true}" ng-model="backtester.settings.positions.code"></div>
 			</div>
 			<div class="code_static">
 				}

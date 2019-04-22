@@ -322,7 +322,7 @@ html {
 }
 .ui-tabs > div {
   display: inline-block;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.5);
   font-weight: 600;
   font-size: 12px;
   border-bottom: 3px solid transparent;
@@ -332,6 +332,10 @@ html {
 .ui-tabs > div.selected {
   color: #ffffff;
   border-bottom: 3px solid #42a5f5;
+}
+.ui-tabs > div.disabled {
+  color: rgba(255, 255, 255, 0.1);
+  cursor: default;
 }
 .floating-tabs {
   margin: 10px 0;
