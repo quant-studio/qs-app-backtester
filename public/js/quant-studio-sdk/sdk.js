@@ -434,220 +434,6 @@
 	
 	
 	
-	
-	var {algo_name} = function(datasets) {
-		
-		var data = {project_data};
-		
-
-	    var dataset_caches = {};
-	    
-	    var zipDatasets	= function(a, b) {
-			// Find the date field on that box
-			var boxData = data;
-			
-			var values = {};
-			_.each(a, function(item) {
-				values[new Date(item.d).getTime().toString()] = _.extend({},values[new Date(item.d).getTime().toString()], item);
-			});
-			_.each(b, function(item) {
-				values[new Date(item.d).getTime().toString()] = _.extend({},values[new Date(item.d).getTime().toString()], item);
-			});
-			
-			
-			var values = _.values(values);
-			values.sort(function(a,b) {
-				return new Date(a.d).getTime()-new Date(b.d).getTime();
-			});
-			return values;
-		};
-		
-		
-	    var executeBox	= function(projectData, datasets, boxId) {
-	    	
-			var box = projectData.boxes[boxId];
-			if (!box) {
-				console.log("Box "+boxId+" not found");
-				return false;
-			}
-			
-			
-			if (box.box=="datasource") {
-				// The data is the datasources dataset
-				
-				
-				// Make a copy of the dataset
-				// At this point, the dataset is saved using the real output keys, not the boxId:portId notation
-				dataset_caches[boxId]	= _.map(datasets[boxId], function(item) {return _.extend({},item);});
-				
-				// We want to convert the data in the boxId:portId notation
-				var replacements = {};
-				var spreadsheetExport = {};
-				_.each(box.outputs, function(item) {
-					replacements[item.id] = item.box+':'+item.id;
-					if (item.exportToSpreadsheet) {
-						spreadsheetExport[item.id] = item.label;
-					}
-				});
-				
-				// Identify the date field
-				var date	= _.find(box.schema, function(item) {
-					return item.isDate;
-				});
-				
-				dataset_caches[boxId] = _.map(dataset_caches[boxId], function(item) {
-					// Make sure the date is "d"
-					if (date) {
-						item.d = new Date(item[date.prop]);
-					}
-					_.each(replacements, function(v,k) {
-						if (item[k] && k!='d') {
-							item[v] = item[k];
-							delete item[k];
-						}
-					});
-					return item;
-				});
-				
-			} else {
-				// Process a component, which pulls its data from its ancestors
-				if (!box.parents || box.parents.length==0) {
-					console.log("Orphan box",box);
-					// Don't go further, no data to inherit
-					box.orphan = true;
-					return false;
-				}
-				box.orphan = false;
-				
-				// Get the data from the parents
-				var dataset = [];
-				// Zip all the parent datasets together into a single dataset
-				_.each(box.parents, function(parent) {
-					if (!dataset_caches[parent]) {
-						console.log("Box "+parent+" not found");
-						return false;
-					}
-					dataset = zipDatasets(dataset,dataset_caches[parent]);
-				});
-				// Make a deep copy of it, save
-				dataset_caches[boxId] = _.map(dataset, function(item) {return _.extend({},item);});
-				
-				// Execute the logic
-				var transformParams = {
-					input:	{},
-					output:	{},
-					outputKeys:	{}
-				};
-				
-				_.each(box.inputs, function(port) {
-					if (port.type=='data') {
-						if (port.connection && port.connection.length>0) {
-							// If it's a plugin, then it can only get one input for each input port
-							transformParams.input[port.id] = port.connection[0].box+':'+port.connection[0].id;
-						}
-						if (!port.connection) {
-							console.log("NO CONNECTION",port, box);
-							return false;
-						}
-						// Include the input data column in the dataset, so the output can be understood in context
-						transformParams.outputKeys[port.connection[0].box+':'+port.connection[0].id] = true;
-					} else {
-						// Input value here?
-						if (port.connection && port.connection.length==1 && inputs.hasOwnProperty(port.connection[0].id)) {
-							transformParams.input[port.id] = inputs[port.connection[0].id];
-						} else {
-							transformParams.input[port.id] = port.value;
-						}
-						
-					}
-				});
-				_.each(box.outputs, function(port) {
-					transformParams.output[port.id] = port.box+':'+port.id;
-					transformParams.outputKeys[port.box+':'+port.id] = true;
-				});
-				
-				var stats = ss;
-				var transform = box;
-				
-				try {
-					
-					delete box.runtimeError;
-					
-					try {
-						var cb		= eval('(function (data, options, plugins) {'+transform.code+'})');
-						dataset_caches[boxId]	= cb(dataset_caches[boxId], transformParams, {});
-					} catch(e) {
-						console.log("e",e);
-						box.runtimeError = e.message;
-					}
-					
-				} catch (e) {
-					console.log("ERROR",e);
-				}
-			}
-			
-		};
-		
-		
-		/*
-			Rebuild the data, project & inputs passed as parameters.
-			Version: 2 (multiple datasources)
-		*/
-		var rebuildData	= function(projectData, datasets) {
-			_.each(projectData.toposort, function(boxid) {
-				// Build up the data
-				executeBox(projectData, datasets, boxid)
-			});
-			
-			return datasets;
-		};
-		
-		
-		// Build the dataset
-		datasets	= rebuildData(data, datasets);
-
-		
-		
-		// Rename and build the export data
-		var exportVars		= {};
-		var outputDataset	= {};
-		
-		_.each(data.boxes, function(box) {
-			_.each(box.outputs, function(port) {
-				if (port.exportVar) {
-					exportVars[port.exportVar] = {
-						box:	port.box,
-						id:		port.id
-					};
-					_.each(dataset_caches[port.box], function(datapoint) {
-						if (datapoint.hasOwnProperty(port.box+':'+port.id)) {
-							if (!outputDataset[datapoint.d]) {
-								outputDataset[datapoint.d] = {
-									d:	datapoint.d
-								};
-							}
-							outputDataset[datapoint.d][port.exportVar] = datapoint[port.box+':'+port.id]
-						}
-					});
-				}
-			});
-		});
-		
-		var output = _.map(outputDataset, function(item) {
-			item.d = new Date(item.d);
-			return item;
-		});
-		output.sort(function(a, b) {
-			return a.d-b.d;
-		});
-		
-		return output;
-	};
-
-	
-	
-	
-	
 	sdk = {
 		loaded:		false,
 		listener:	null,
@@ -756,6 +542,8 @@
 			var evtDomain	= typeParts[0];
 			var evtType		= typeParts[1];
 			
+			//console.log(">> ", evtDomain, evtType);
+			
 			switch (evtDomain) {
 				case "data":
 					sdk.data[evtType] = dataPayload;
@@ -781,11 +569,20 @@
 			//console.log("Client received:", payload);
 		},
 		send:	function(type, payload) {
+			var parts = type.split(':');
+			switch (parts[0]) {
+				case "save":
+					if (!sdk.data.user_id) {
+						console.log("Save not allowed, user not authenticated");
+						return false;
+					}
+				break;
+			}
 			//console.log("Client Send:", type, payload);
 			window.parent.postMessage({
 				type:		type,
 				payload:	sdk.cleanData(payload)
-			}, 'https://www.quant-studio.com');
+			}, 'http://localhost:274'/*'https://www.quant-studio.com'*/);
 		}
 	}
 	

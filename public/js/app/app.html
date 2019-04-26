@@ -17,6 +17,60 @@
 	
 	<!-- Datasource -->
 	<div ng-if="tabs.is('datasource')">
+		
+		
+		<div class="ui-table">
+			<table>
+				<thead>
+					<tr>
+						<th>
+							Datasource
+						</th>
+						<th>
+							Source
+						</th>
+						<th>
+							Options
+						</th>
+						<th class="action">
+							&nbsp;
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="box in backtester.project.boxes" ng-if="box.box=='datasource'">
+						<td class="name">
+							{{box.label||box.name}}
+						</td>
+						<td class="input" style="max-width:110px">
+							<div ui-input="{type:'list', list:backtester.datasource.types}" value="backtester.settings.datasources[box.id].type"></div>
+						</td>
+						<td class="input">
+							<div ui-input="{type:'url'}" value="backtester.settings.datasources[box.id].url" ng-if="backtester.settings.datasources[box.id].type=='csv'||backtester.settings.datasources[box.id].type=='tsv'"></div>
+							<div ng-if="backtester.settings.datasources[box.id].type=='project'">
+								-
+							</div>
+						</td>
+						<td class="action">
+							<div>
+								<span class="fas fa-play-circle"></span> Test
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="ctas small">
+			<div ng-click="backtester.datasource.test()">
+				<span class="fas fa-play-circle"></span> Test
+			</div>
+			<div ng-click="tabs.select('positions')">
+				<span class="fas fa-arrow-circle-right"></span> Next: Positions
+			</div>
+		</div>
+		
+		<!--
 		<div class="floating-tabs">
 			<div>
 				<div ng-click="backtester.datasource.setType('csv')" ng-class="{active:backtester.settings.datasource.type=='csv'}">
@@ -42,20 +96,78 @@
 				</div>
 			</div>
 		</div>
-		
-		<div class="ctas small">
-			<div ng-click="backtester.datasource.test()">
-				<span class="fas fa-play-circle"></span> Test
-			</div>
-			<div ng-click="tabs.select('positions')">
-				<span class="fas fa-arrow-circle-right"></span> Next: Positions
-			</div>
-		</div>
+		-->
 	</div>
 	
 	
 	<!-- Positions -->
 	<div ng-if="tabs.is('positions')">
+		<div class="ui-table">
+			<table>
+				<thead>
+					<tr>
+						<th>
+							Signal
+						</th>
+						<th>
+							Type
+						</th>
+						<th class="center">
+							Open Condition
+						</th>
+						<th class="center">
+							Close Condition
+						</th>
+						<th class="action">
+							&nbsp;
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="(portId, signal) in backtester.settings.positions">
+						<td class="name">
+							{{signal.label}}
+						</td>
+						<td class="input" style="max-width:80px">
+							<div ui-input="{type:'list', list:backtester.positions.types}" value="signal.type"></div>
+						</td>
+						<!--<td class="input">
+							<div style="display:inline-block;margin-right:10px;" ui-input="{type:'list', list:backtester.positions.ops}" value="signal.condition.op"></div>
+							<div style="display:inline-block;" ui-input="{type:'number'}" value="signal.condition.value"></div>
+						</td>-->
+						<td class="button">
+							<div ng-click="backtester.positions.editOpenCondition(portId)">
+								<span class="fas fa-edit"></span> Edit
+							</div>
+						</td>
+						<td class="button">
+							<div ng-click="backtester.positions.editCloseCondition(portId)">
+								<span class="fas fa-edit"></span> Edit
+							</div>
+						</td>
+						<td class="action">
+							<div ng-click="backtester.positions.remove(portId)">
+								<span class="fas fa-trash"></span> Remove
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="ctas small">
+			<div ng-click="backtester.positions.test()">
+				<span class="fas fa-play-circle"></span> Test
+			</div>
+			<div ng-click="backtester.positions.run()">
+				<span class="fas fa-check-circle"></span> Start Backtesting
+			</div>
+		</div>
+	</div>
+	
+	
+	<!-- code -->
+	<div ng-if="tabs.is('code')">
 		<div class="code_input">
 			<!---->
 			<div class="code_static">
@@ -78,6 +190,19 @@
 			</div>
 			<div ng-click="backtester.positions.run()">
 				<span class="fas fa-check-circle"></span> Start Backtesting
+			</div>
+		</div>
+	</div>
+	
+	
+	<!-- Drop overlay -->
+	<div class="drop-overlay" ng-if="backtester.showDropOverlay">
+		<div>
+			<div ng-if="backtester.dropOver">
+				<span class="fas fa-plus"></span> New signal: {{backtester.dropOver}}
+			</div>
+			<div ng-if="!backtester.dropOver">
+				Drop here to add a new signal
 			</div>
 		</div>
 	</div>

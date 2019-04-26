@@ -1,0 +1,47 @@
+<div class="ui-input">
+	<!-- Text -->
+	<div class="ui-input-text" ng-if="uiInput.type=='text'">
+		<div class="nobreak ui-input-value" ng-if="!ui.edit" ng-click="ui.edit=true">
+			<span class="fas fa-edit"></span>
+			{{ui.getLabel(value)||'(empty)'}}
+		</div>
+		<div ng-if="ui.edit">
+			<input type="text" ng-model="ui.value" placeholder="Type something..." ng-enter="ui.done()" ng-blur="ui.done()" ng-escape="ui.edit=false" />
+		</div>
+	</div>
+	
+	<!-- Number -->
+	<div class="ui-input-text" ng-if="uiInput.type=='number'">
+		<div class="nobreak ui-input-value" ng-if="!ui.edit" ng-click="ui.edit=true">
+			<span class="fas fa-edit"></span>
+			{{ui.getLabel(value)||'(empty)'}}
+		</div>
+		<div ng-if="ui.edit">
+			<input type="number" ng-model="ui.value" placeholder="Enter a number" ng-enter="ui.done()" ng-blur="ui.done()" ng-escape="ui.edit=false" />
+		</div>
+	</div>
+	
+	<!-- Url -->
+	<div class="ui-input-url" ng-if="uiInput.type=='url'">
+		<div class="nobreak ui-input-value" ng-if="!ui.edit" ng-click="ui.edit=true">
+			<span class="fas fa-edit"></span>
+			{{ui.getLabel(value)||'(empty)'}}
+		</div>
+		<div ng-if="ui.edit">
+			<input type="text" ng-model="ui.value" placeholder="https://..." ng-enter="ui.done()" ng-blur="ui.done()" ng-escape="ui.edit=false" />
+		</div>
+	</div>
+	
+	<!-- List -->
+	<div class="ui-input-list" ng-if="uiInput.type=='list'">
+		<div class="nobreak ui-input-value" ng-if="!ui.edit" ng-click="ui.edit=true">
+			<span class="fas fa-edit"></span>
+			{{ui.getLabel(value)||'(empty)'}}
+		</div>
+		<div ng-if="ui.edit">
+			<select ng-model="ui.value" ng-enter="ui.done()" ng-blur="ui.done()">
+				<option value="{{item.value}}" ng-repeat="item in uiInput.list">{{item.label}}</option>
+			</select>
+		</div>
+	</div>
+</div>
